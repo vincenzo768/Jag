@@ -33,3 +33,4 @@ async function run() {
 }
 
 run();
+fs.appendFileSync("hip.m3u", `\n# Updated at ${new Date().toISOString()}`);
