@@ -21,10 +21,13 @@ jobs:
       - name: Run update script
         run: node update.js
 
-      - name: Commit and push if changed
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add hip.m3u
-          git diff --cached --quiet || git commit -m "Auto update hip.m3u"
-          git push
+      - name: Commit & Push
+  run: |
+    git config --global user.name "github-actions"
+    git config --global user.email "github-actions@github.com"
+
+    git pull --rebase origin main
+
+    git add hip.m3u
+    git commit -m "Auto update hip.m3u" || echo "No changes"
+    git push origin main
