@@ -9,26 +9,27 @@ async function run() {
 
   const lines = text.split("\n");
 
-  let out = ["#EXTM3U\n"];
-  let capture = false;
+  let output = ["#EXTM3U", ""];
+
+  let grab = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
     if (line.includes('group-title="SONYLIV"')) {
-      capture = true;
+      grab = true;
     }
 
-    if (capture) {
-      out.push(line);
+    if (grab) {
+      output.push(line);
       if (line.trim().endsWith(".m3u8")) {
-        out.push("");
-        capture = false;
+        output.push("");
+        grab = false;
       }
     }
   }
 
-  fs.writeFileSync("sony.m3u", out.join("\n"));
+  fs.writeFileSync("hip.m3u", output.join("\n"));
 }
 
 run();
