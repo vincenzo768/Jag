@@ -1,36 +1,9 @@
-import fs from "fs";
+const fs = require("fs");
 
-const SOURCE =
-  "https://raw.githubusercontent.com/amit-654584/jtv/main/jtv.m3u";
+const content = `#EXTM3U
+# Updated at ${new Date().toISOString()}
+`;
 
-async function run() {
-  const res = await fetch(SOURCE);
-  const text = await res.text();
+fs.writeFileSync("hip.m3u", content);
 
-  const lines = text.split("\n");
-
-  let output = ["#EXTM3U", ""];
-
-  let grab = false;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    if (line.includes('group-title="SONYLIV"')) {
-      grab = true;
-    }
-
-    if (grab) {
-      output.push(line);
-      if (line.trim().endsWith(".m3u8")) {
-        output.push("");
-        grab = false;
-      }
-    }
-  }
-
-  fs.writeFileSync("hip.m3u", output.join("\n"));
-}
-
-run();
-fs.appendFileSync("hip.m3u", `\n# Updated at ${new Date().toISOString()}`);
+console.log("hip.m3u updated successfully");
