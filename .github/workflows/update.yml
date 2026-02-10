@@ -1,12 +1,12 @@
-name: Auto Update HIP Playlist
+name: Update hip.m3u
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,15 +16,15 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "18"
 
-      - name: Generate hip.m3u
+      - name: Run update script
         run: node update.js
 
-      - name: Commit & Push
+      - name: Commit and push if changed
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
           git add hip.m3u
-          git commit -m "Auto update hip.m3u" || exit 0
+          git diff --cached --quiet || git commit -m "Auto update hip.m3u"
           git push
